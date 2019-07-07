@@ -42,10 +42,11 @@ class Robot(object):
         """
         if self.testing:
             # TODO 1. No random choice when testing
-            pass
+            self.epsilon = 0
         else:
             # TODO 2. Update parameters when learning
-            pass
+            self.t += 1
+            self.epsilon = self.epsilon0 * (0.9 ** self.t)
 
         return self.epsilon
 
@@ -66,39 +67,46 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        pass
+        self.Qtable.setdefault(state, dict.fromkeys(self.maze.valid_actions, 0))
 
     def choose_action(self):
         """
         Return an action according to given rules
         """
+        qline = self.Qtable[self.state]
         def is_random_exploration():
 
             # TODO 5. Return whether do random choice
             # hint: generate a random number, and compare
             # it with epsilon
-            pass
+            num = random.uniform(0,1)
+            return num < self.epsilon
 
         if self.learning:
             if is_random_exploration():
                 # TODO 6. Return random choose aciton
-                return None
+                return random.choice(self.valid_actions)
             else:
                 # TODO 7. Return action with highest q value
-                return None
+                return max(qline, key=qline.get)
         elif self.testing:
             # TODO 7. choose action with highest q value
+            return max(qline, key=qline.get)
         else:
             # TODO 6. Return random choose aciton
+            return random.choice(self.valid_actions)
 
     def update_Qtable(self, r, action, next_state):
         """
         Update the qtable according to the given rule.
         """
         if self.learning:
-            pass
             # TODO 8. When learning, update the q table according
             # to the given rules
+            q_old = self.Qtable[self.state][action]
+            qline = self.Qtable[next_state]
+            q_max_next = qline[max(qline, key=qline.get)]
+            self.Qtable[self.state][action] = q_old + self.alpha * ( ( r + self.gamma * q_max_next ) - q_old )
 
     def update(self):
         """
