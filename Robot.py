@@ -46,7 +46,9 @@ class Robot(object):
         else:
             # TODO 2. Update parameters when learning
             self.t += 1
-            self.epsilon = self.epsilon0 * (0.9 ** self.t)
+            self.epsilon = self.epsilon0 - 0.001 * self.t
+            if self.epsilon < 0:
+                self.epsilon = 0
 
         return self.epsilon
 
