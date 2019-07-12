@@ -2,7 +2,7 @@ import random
 
 class Robot(object):
 
-    def __init__(self, maze, alpha=0.5, gamma=0.9, epsilon0=0.5):
+    def __init__(self, maze, alpha=0.5, gamma=0.9, epsilon0=0.5, dv=0.001):
 
         self.maze = maze
         self.valid_actions = self.maze.valid_actions
@@ -19,6 +19,7 @@ class Robot(object):
 
         self.Qtable = {}
         self.reset()
+        self.dv = dv
 
     def reset(self):
         """
@@ -46,7 +47,7 @@ class Robot(object):
         else:
             # TODO 2. Update parameters when learning
             self.t += 1
-            self.epsilon = self.epsilon0 - 0.001 * self.t
+            self.epsilon = self.epsilon0 - self.dv * self.t
             if self.epsilon < 0:
                 self.epsilon = 0
 
