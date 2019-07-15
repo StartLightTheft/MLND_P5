@@ -43,13 +43,13 @@ class Robot(object):
         """
         if self.testing:
             # TODO 1. No random choice when testing
-            self.epsilon = 0
+            self.epsilon = 0.0
         else:
             # TODO 2. Update parameters when learning
             self.t += 1
             self.epsilon = self.epsilon0 - self.dv * self.t
-            if self.epsilon < 0:
-                self.epsilon = 0
+            if self.epsilon < 0.0:
+                self.epsilon = 0.0
 
         return self.epsilon
 
@@ -70,7 +70,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        self.Qtable.setdefault(state, dict.fromkeys(self.maze.valid_actions, 0))
+        self.Qtable.setdefault(state, dict.fromkeys(self.maze.valid_actions, 0.0))
 
     def choose_action(self):
         """
